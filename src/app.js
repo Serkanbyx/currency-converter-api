@@ -9,6 +9,7 @@ const currencyRoutes = require("./routes/currencyRoutes");
 const healthRoute = require("./routes/healthRoute");
 const errorHandler = require("./middlewares/errorHandler");
 const apiLimiter = require("./middlewares/rateLimiter");
+const requestLogger = require("./middlewares/requestLogger");
 
 const app = express();
 
@@ -16,6 +17,7 @@ const app = express();
 app.use(helmet());
 app.use(cors());
 app.use(express.json());
+app.use(requestLogger);
 
 // ─── Rate Limiter ───────────────────────────────────────────────────
 app.use("/api/", apiLimiter);
