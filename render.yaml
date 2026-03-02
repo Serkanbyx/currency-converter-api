@@ -1,0 +1,16 @@
+services:
+  - type: web
+    name: currency-converter-api
+    runtime: node
+    plan: free
+    buildCommand: npm install
+    startCommand: node server.js
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: EXCHANGE_RATE_API_KEY
+        sync: false
+      - key: REDIS_URL
+        sync: false
+      - key: CACHE_TTL
+        value: "3600"

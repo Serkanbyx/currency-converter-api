@@ -1,0 +1,22 @@
+const env = require("./src/config/env");
+const { connectRedis } = require("./src/config/redis");
+const app = require("./src/app");
+
+const startServer = async () => {
+  await connectRedis();
+
+  app.listen(env.PORT, () => {
+    console.log(`\n  Currency Converter API`);
+    console.log(`  ─────────────────────────────────`);
+    console.log(`  Environment : ${env.NODE_ENV}`);
+    console.log(`  Server      : http://localhost:${env.PORT}`);
+    console.log(`  Swagger     : http://localhost:${env.PORT}/api-docs`);
+    console.log(`  Health      : http://localhost:${env.PORT}/health`);
+    console.log(`  ─────────────────────────────────\n`);
+  });
+};
+
+startServer().catch((error) => {
+  console.error("Failed to start server:", error);
+  process.exit(1);
+});
