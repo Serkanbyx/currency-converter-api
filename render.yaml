@@ -1,3 +1,8 @@
+# Currency Converter API — Render Deploy Config
+# This is an open-source demo project. Redis is optional (app works without it).
+# After deploy, set EXCHANGE_RATE_API_KEY in Render Dashboard → Environment.
+# Free key: https://www.exchangerate-api.com/
+
 services:
   - type: web
     name: currency-converter-api
@@ -9,8 +14,6 @@ services:
       - key: NODE_ENV
         value: production
       - key: EXCHANGE_RATE_API_KEY
-        sync: false
-      - key: REDIS_URL
-        sync: false
+        sync: false # Set manually in Render Dashboard
       - key: CACHE_TTL
         value: "3600"
