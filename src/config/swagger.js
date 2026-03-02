@@ -11,7 +11,8 @@ const swaggerOptions = {
         "A RESTful API for real-time currency conversion with Redis caching. " +
         "Powered by ExchangeRate-API.",
       contact: {
-        name: "API Support",
+        name: "Serkanby",
+        url: "https://serkanbayraktar.com/",
       },
     },
     servers: [
