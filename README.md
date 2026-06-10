@@ -89,6 +89,21 @@ npm start
 
 The server starts at `http://localhost:3000` by default.
 
+### Running Tests
+
+The project uses [Jest](https://jestjs.io/) and [Supertest](https://github.com/ladjs/supertest) for unit and integration tests. The external API is mocked, so no API key or network access is required.
+
+```bash
+# Run the full test suite
+npm test
+
+# Watch mode (re-runs on file changes)
+npm run test:watch
+
+# Generate a coverage report
+npm run test:coverage
+```
+
 ## Usage
 
 1. Start the server using the installation steps above
@@ -206,6 +221,7 @@ Create a new route in `src/routes/` and register it in `src/app.js`. Follow the 
 | `NODE_ENV` | Environment mode | No | `development` |
 | `REDIS_URL` | Redis connection URL | No | `redis://localhost:6379` |
 | `CACHE_TTL` | Cache duration in seconds | No | `3600` |
+| `PUBLIC_URL` | Public base URL shown in Swagger UI | No | — |
 
 ## Project Structure
 
@@ -214,7 +230,7 @@ Create a new route in `src/routes/` and register it in `src/app.js`. Follow the 
 │   ├── config/
 │   │   ├── env.js                  # Environment variable validation
 │   │   ├── redis.js                # Redis client setup & connection
-│   │   └── swagger.js              # Swagger/OpenAPI configuration
+│   │   └── swagger.js              # Swagger/OpenAPI configuration (dynamic version + servers)
 │   ├── controllers/
 │   │   └── currencyController.js   # Request handlers
 │   ├── middlewares/
@@ -227,17 +243,23 @@ Create a new route in `src/routes/` and register it in `src/app.js`. Follow the 
 │   ├── services/
 │   │   └── exchangeRateService.js  # ExchangeRate-API integration
 │   ├── utils/
+│   │   ├── cacheKeys.js            # Centralized cache key builders
 │   │   └── responseHelper.js       # Response formatting utilities
-│   └── app.js                      # Express app configuration
-├── .github/                        # Issue & PR templates
-├── server.js                       # Application entry point
+│   ├── app.js                      # Express app configuration
+│   └── server.js                   # Application entry point
+├── tests/                          # Jest + Supertest test suite
+├── docs/
+│   └── build-guide.md              # Step-by-step build playbook
+├── .github/                        # Community health files
+│   ├── ISSUE_TEMPLATE/             # Bug report & feature request templates
+│   ├── PULL_REQUEST_TEMPLATE.md    # Pull request template
+│   ├── CONTRIBUTING.md             # Contribution guidelines
+│   ├── CODE_OF_CONDUCT.md          # Code of conduct
+│   └── SECURITY.md                 # Security policy
 ├── render.yaml                     # Render deployment config
 ├── .env.example                    # Environment template
 ├── package.json                    # Dependencies & scripts
-├── LICENSE                         # MIT License
-├── CONTRIBUTING.md                 # Contribution guidelines
-├── CODE_OF_CONDUCT.md              # Code of conduct
-└── SECURITY.md                     # Security policy
+└── LICENSE                         # MIT License
 ```
 
 ## Deployment (Render)
@@ -251,7 +273,7 @@ Create a new route in `src/routes/` and register it in `src/app.js`. Follow the 
 
 ## Contributing
 
-Contributions are welcome! Please read the [Contributing Guide](CONTRIBUTING.md) before submitting a pull request.
+Contributions are welcome! Please read the [Contributing Guide](.github/CONTRIBUTING.md) before submitting a pull request.
 
 1. Fork the repository
 2. Create your feature branch (`git checkout -b feat/amazing-feature`)

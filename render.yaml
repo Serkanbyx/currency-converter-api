@@ -9,7 +9,7 @@ services:
     runtime: node
     plan: free
     buildCommand: npm install
-    startCommand: node server.js
+    startCommand: node src/server.js
     envVars:
       - key: NODE_ENV
         value: production
@@ -17,3 +17,5 @@ services:
         sync: false # Set manually in Render Dashboard
       - key: CACHE_TTL
         value: "3600"
+      - key: PUBLIC_URL
+        sync: false # Set to your Render URL, e.g. https://your-app.onrender.com

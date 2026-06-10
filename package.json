@@ -2,12 +2,30 @@
   "name": "currency-converter-api",
   "version": "1.0.0",
   "description": "A RESTful Currency Converter API with Redis caching and Swagger docs",
-  "main": "server.js",
+  "main": "src/server.js",
   "scripts": {
-    "start": "node server.js",
-    "dev": "node --watch server.js"
+    "start": "node src/server.js",
+    "dev": "node --watch src/server.js",
+    "test": "jest --runInBand",
+    "test:watch": "jest --watch",
+    "test:coverage": "jest --coverage --runInBand"
   },
-  "keywords": ["currency", "converter", "api", "redis", "swagger"],
+  "jest": {
+    "testEnvironment": "node",
+    "setupFiles": [
+      "<rootDir>/tests/setup.js"
+    ],
+    "collectCoverageFrom": [
+      "src/**/*.js"
+    ]
+  },
+  "keywords": [
+    "currency",
+    "converter",
+    "api",
+    "redis",
+    "swagger"
+  ],
   "author": {
     "name": "Serkanby",
     "url": "https://serkanbayraktar.com/"
@@ -24,5 +42,9 @@
     "redis": "^5.11.0",
     "swagger-jsdoc": "^6.2.8",
     "swagger-ui-express": "^5.0.1"
+  },
+  "devDependencies": {
+    "jest": "^30.4.2",
+    "supertest": "^7.2.2"
   }
 }

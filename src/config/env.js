@@ -7,6 +7,7 @@ const env = {
   EXCHANGE_RATE_BASE_URL: "https://v6.exchangerate-api.com/v6",
   REDIS_URL: process.env.REDIS_URL || "redis://localhost:6379",
   CACHE_TTL: parseInt(process.env.CACHE_TTL, 10) || 3600, // 1 hour in seconds
+  PUBLIC_URL: process.env.PUBLIC_URL, // e.g. https://your-app.onrender.com (used in Swagger servers)
 };
 
 if (!env.EXCHANGE_RATE_API_KEY) {

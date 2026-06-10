@@ -1,6 +1,6 @@
-const env = require("./src/config/env");
-const { connectRedis, getRedisClient, getRedisStatus } = require("./src/config/redis");
-const app = require("./src/app");
+const env = require("./config/env");
+const { connectRedis, getRedisClient, getRedisStatus } = require("./config/redis");
+const app = require("./app");
 
 let server;
 

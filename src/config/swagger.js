@@ -1,12 +1,27 @@
 const swaggerJsdoc = require("swagger-jsdoc");
 const env = require("./env");
+const { version } = require("../../package.json");
+
+const servers = [
+  {
+    url: `http://localhost:${env.PORT}`,
+    description: "Development server",
+  },
+];
+
+if (env.PUBLIC_URL) {
+  servers.unshift({
+    url: env.PUBLIC_URL,
+    description: "Production server",
+  });
+}
 
 const swaggerOptions = {
   definition: {
     openapi: "3.0.0",
     info: {
       title: "Currency Converter API",
-      version: "1.0.0",
+      version,
       description:
         "A RESTful API for real-time currency conversion with Redis caching. " +
         "Powered by ExchangeRate-API.",
@@ -15,12 +30,7 @@ const swaggerOptions = {
         url: "https://serkanbayraktar.com/",
       },
     },
-    servers: [
-      {
-        url: `http://localhost:${env.PORT}`,
-        description: "Development server",
-      },
-    ],
+    servers,
     tags: [
       { name: "Currency", description: "Currency conversion and rate endpoints" },
       { name: "Health", description: "Service health check" },

@@ -1,8 +1,10 @@
 const exchangeRateService = require("../services/exchangeRateService");
 const { setCache } = require("../middlewares/cache");
 const { sendSuccess, sendError } = require("../utils/responseHelper");
+const { buildConvertKey, buildRatesKey, CURRENCIES_KEY } = require("../utils/cacheKeys");
 
 const CURRENCY_CODE_REGEX = /^[A-Z]{3}$/;
+const MAX_AMOUNT = 1_000_000_000_000; // 1 trillion — guards against overflow/abuse
 
 const validateCurrencyCode = (code, fieldName) => {
   if (!code) throw Object.assign(new Error(`${fieldName} is required`), { name: "ValidationError" });
@@ -23,16 +25,19 @@ const convertCurrency = async (req, res, next) => {
   try {
     const from = validateCurrencyCode(req.query.from, "from");
     const to = validateCurrencyCode(req.query.to, "to");
-    const amount = parseFloat(req.query.amount);
+    const amount = Number.parseFloat(req.query.amount);
 
-    if (isNaN(amount) || amount <= 0) {
+    if (!Number.isFinite(amount) || amount <= 0) {
       return sendError(res, "amount must be a positive number", 400);
+    }
+
+    if (amount > MAX_AMOUNT) {
+      return sendError(res, `amount must not exceed ${MAX_AMOUNT}`, 400);
     }
 
     const result = await exchangeRateService.fetchPairConversion(from, to, amount);
 
-    const cacheKey = `convert:${from}:${to}:${amount}`;
-    await setCache(cacheKey, result);
+    await setCache(buildConvertKey(from, to, amount), result);
 
     return sendSuccess(res, result);
   } catch (error) {
@@ -48,8 +53,7 @@ const getExchangeRates = async (req, res, next) => {
     const base = validateCurrencyCode(req.params.base, "base");
     const result = await exchangeRateService.fetchLatestRates(base);
 
-    const cacheKey = `rates:${base}`;
-    await setCache(cacheKey, result);
+    await setCache(buildRatesKey(base), result);
 
     return sendSuccess(res, result);
   } catch (error) {
@@ -64,7 +68,7 @@ const getSupportedCurrencies = async (req, res, next) => {
   try {
     const currencies = await exchangeRateService.fetchSupportedCurrencies();
 
-    await setCache("currencies", currencies, 86400); // 24h cache
+    await setCache(CURRENCIES_KEY, currencies, 86400); // 24h cache
 
     return sendSuccess(res, { count: currencies.length, currencies });
   } catch (error) {

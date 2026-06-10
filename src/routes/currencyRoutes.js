@@ -1,6 +1,7 @@
 const { Router } = require("express");
 const { convertCurrency, getExchangeRates, getSupportedCurrencies } = require("../controllers/currencyController");
 const { cacheMiddleware } = require("../middlewares/cache");
+const { buildConvertKey, buildRatesKey, CURRENCIES_KEY } = require("../utils/cacheKeys");
 
 const router = Router();
 
@@ -139,7 +140,7 @@ const router = Router();
  */
 router.get(
   "/convert",
-  cacheMiddleware((req) => `convert:${(req.query.from || "").toUpperCase()}:${(req.query.to || "").toUpperCase()}:${req.query.amount}`),
+  cacheMiddleware((req) => buildConvertKey(req.query.from, req.query.to, req.query.amount)),
   convertCurrency
 );
 
@@ -171,7 +172,7 @@ router.get(
  */
 router.get(
   "/rates/:base",
-  cacheMiddleware((req) => `rates:${(req.params.base || "").toUpperCase()}`),
+  cacheMiddleware((req) => buildRatesKey(req.params.base)),
   getExchangeRates
 );
 
@@ -193,7 +194,7 @@ router.get(
  */
 router.get(
   "/currencies",
-  cacheMiddleware(() => "currencies"),
+  cacheMiddleware(() => CURRENCIES_KEY),
   getSupportedCurrencies
 );
 
